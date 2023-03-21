@@ -30,7 +30,14 @@
     text-decoration: none;
 }
 
+/* Testando criação de branch */
+
 .active {
+    background-color: orange;
+    color: #000;
+}
+
+/* .active {
     background-color: #000;
     color: #fff;
-}
+} */
