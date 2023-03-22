@@ -1,6 +1,7 @@
 import styles from './Register.module.css';
 
 import { useState, useEffect } from "react";
+import { useAuthentication } from '../../hooks/useAuthentication';
 
 export default function Register() {
   const [displayName, setDisplayName] = useState("")
@@ -9,11 +10,13 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
  
-  // Enviar todos os dados para o form
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const {createUser, error: authError, loading} = useAuthentication();
 
-    setError("")
+  // Enviar todos os dados para o form
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setError("");
 
     const user = {
       displayName,
@@ -22,12 +25,23 @@ export default function Register() {
     }
 
     if(password !== confirmPassword) {
-      setError("As senhas precisam ser iguais!")
+      setError("As senhas precisam ser iguais!");
       return
+    };
+
+    const res = await createUser(user);
+
+    console.log(res);
+    e.target.reset();
+  };
+
+  useEffect(() => {
+
+    if(authError) {
+      setError(authError)
     }
 
-    console.log(user);
-  };
+  }, [authError])
 
  return (
    <div className={styles.register}>
